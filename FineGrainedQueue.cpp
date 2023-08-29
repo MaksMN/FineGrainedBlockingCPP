@@ -132,3 +132,14 @@ void FineGrainedQueue::remove(int value)
     }
     prev->node_mutex->unlock();
 }
+
+void FineGrainedQueue::show()
+{
+    Node *current = head;
+    while (current->next)
+    {
+        std::cout << current->value << " -> ";
+        current = current->next;
+    }
+    std::cout << current->value << std::endl;
+}

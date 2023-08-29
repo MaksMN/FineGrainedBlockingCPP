@@ -14,13 +14,15 @@ struct Node
 
 class FineGrainedQueue
 {
-    Node *head;
+
     std::mutex *queue_mutex = new std::mutex;
 
 public:
+    Node *head;
     ~FineGrainedQueue();
     void push_front(int data);
     void push_back(int data);
     void insert(int pos, int data);
     void remove(int value);
+    void show();
 };

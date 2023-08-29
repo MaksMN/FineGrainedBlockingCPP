@@ -3,6 +3,14 @@
 FineGrainedQueue::~FineGrainedQueue()
 {
     delete queue_mutex;
+    Node *current = head;
+    while (current->next)
+    {
+        Node *old_current = current;
+        current = old_current->next;
+        delete old_current;
+    }
+    delete current;
 }
 
 void FineGrainedQueue::push_front(int data)
@@ -46,7 +54,7 @@ void FineGrainedQueue::push_back(int data)
     return;
 }
 
-void FineGrainedQueue::insert(int pos, int data)
+void FineGrainedQueue::insertIntoMiddle(int pos, int data)
 {
     // здесь надо сделать так чтобы соседние потоки не уничтожили связь current->next и сам current
     queue_mutex->lock(); // залочим весь список
@@ -73,7 +81,7 @@ void FineGrainedQueue::insert(int pos, int data)
         Node *old_current = current; // залочен, надо освободить
         current = current->next;     // залочен, не надо освобождать
 
-        // current->next не залочена, может быть удалена другими потоками, надо ее залочить
+        // current->next не залочена, может быть залочена другими потоками, надо ее залочить
         if (current->next)
         {
             current->next->node_mutex->lock();
